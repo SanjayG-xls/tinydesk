@@ -239,6 +239,15 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
   site; a missing and an empty image each show "not on this site right
   now" without Install, the other boards still install.
 
+- The TinyDesk Shell draft release `v0.1.6` (tag on e85ad85, built by
+  the release workflow): its 7 files match its `SHA256SUMS.txt`; both
+  manifests name 0.1.6 and the right chip; the PC archives hold `tdsh` /
+  `tdsh.exe`, README and LICENSE. The app part of its ESP32 image,
+  written to the 4 MB ESP32's app partition, runs: `version` 0.1.6,
+  `idfinfo` ESP-IDF v5.3.1, a file written and read back, `peek -l`;
+  then the desktop image was written back. Its ESP32-C6 image was not
+  run on a board.
+
 Not done for this candidate yet (they need the owner's passwords):
 factory NVS, recovery, and fresh installs from the live site. After tagging: the draft release's images against
 `SHA256SUMS.txt`.
