@@ -208,6 +208,16 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
 - 10.5 minutes of use (About and the Terminal opened about once a minute)
   and idle: no reset; `uptime` at the end 12:58 (ESP32-C6), 17:14 (ESP32
   with PSRAM), 12:47 (4 MB ESP32).
+- Cold boot (unplugged and plugged in again by the owner): the ESP32-C6
+  and the 4 MB ESP32 started on their own into 0.1.6 (`uptime` matching
+  the replug). The ESP32 with PSRAM (an ESP32-WROVER-IE board) stayed
+  silent after 3 of 4 power-ons: nothing at 115200 from about 3 s after
+  power-up, no answer at 921600, and not in download mode (esptool
+  cannot connect without a reset); a pulse on EN started it normally.
+  Two of those were with 0.1.6, one with the official 0.1.4 (`ota
+  rollback`, replugged, then back to 0.1.6), and the fourth power-on
+  started 0.1.6 on its own (`uptime` matching the replug): this board's
+  power-up, not the firmware.
 - The Shell firmware (`tdsh_esp32.bin` above) on the 4 MB ESP32, written
   to the app partition (same layout as the desktop): boots to root on the
   local console at 115200, `version` TinyDesk Shell 0.1.6, `heap` 210,700
@@ -229,10 +239,8 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
   site; a missing and an empty image each show "not on this site right
   now" without Install, the other boards still install.
 
-Not done for this candidate yet (they need the owner: a power switch,
-passwords): a cold boot by power cycle (the boards were reset over the
-serial lines), factory NVS, recovery, and fresh installs from the live
-site. After tagging: the draft release's images against
+Not done for this candidate yet (they need the owner's passwords):
+factory NVS, recovery, and fresh installs from the live site. After tagging: the draft release's images against
 `SHA256SUMS.txt`.
 
 The `peek` and `poke` results below were on a build before the version
