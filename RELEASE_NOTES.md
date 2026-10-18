@@ -7,27 +7,25 @@ embedded shell. MQTT and Modbus apps connect the desktop to real projects.
 This release is a developer preview: expect rough edges, and please report
 what breaks.
 
-## New in 0.1.5
+## New in 0.1.6
 
-* **New home:** the code is at github.com/tinydesk-project and the
-  documentation, installer and update information at
-  <https://tinydesk-project.github.io/>. Boards running 0.1.3 or 0.1.4
-  still find this update at the old address; from 0.1.5 on they check
-  the new one.
-* **Update information can move:** should the site move again, the old
-  update information can name the new address (`moved`), and boards
-  follow it from then on (HTTPS only; your own `update.url` still comes
-  first). `ota feed` shows the address in use and why, `ota feed reset`
-  forgets a moved one.
-* **Only root changes the network policy:** `network mode` and
-  `network autowifi` with a value need root; any user still sees them.
-* **Board configuration numbers** are decimal or `0x` hexadecimal; a
-  leading zero no longer means octal.
-* **For contributors:** `STANDARDS.md` in TinyDesk Shell sets out names,
-  code style, commands, board keys and release rules, also for
-  community ports.
+* **nano with UTF-8 text:** the cursor, Backspace and Delete work by
+  character, so text such as `Привет` or `日本語` no longer breaks into
+  stray bytes; Up and Down keep the column (#4).
+* **`peek` and `poke`:** root can read RAM, ROM, PSRAM and the GPIO,
+  IO_MUX and eFuse registers, and switch GPIO outputs, from the
+  Terminal; `peek -l` lists what is allowed.
+* **The Editor on small boards:** a build can also set the number of
+  undo records (`TD_EDITOR_UNDO_OPS`), next to the text size
+  (`TD_EDITOR_MAX`) and the undo text (`TD_EDITOR_UNDO`), to save RAM
+  while the Editor is open (#6).
+* **Scripts on small boards:** a port can set the script memory limits,
+  and a script that runs out of memory while it loads says so instead of
+  stopping silently.
 
-Also since 0.1.0: Software Update offers to save built-in pins before
+Also since 0.1.0: the new home at github.com/tinydesk-project, update
+information that can move, and only root changes the network policy
+(0.1.5); Software Update offers to save built-in pins before
 an official update, non-ASCII names line up, long command lines wrap
 (0.1.4); official updates in Software Update and fixes for boards
 without PSRAM (0.1.3); the SD card at `/sd` and in Files (0.1.2);
