@@ -168,11 +168,17 @@ their SHA-256:
 
 | Image | SHA-256 |
 | --- | --- |
-| `ports/esp32c6` `tinydesk.bin` | `0e8876f04c1fa9d3fc05d3e8841499cf8dc10245b54590f5c0de069714e47bcc` |
+| `ports/esp32c6` `tinydesk.bin` | `33d735b8156f2a9359a1d8d0419da7752acafb6fc2c6cdf9f2a6519a6196f28d` |
 | `ports/esp32` `tinydesk.bin` | `621f56b5f1de2813eb64c57c6f2ebc539190b61d7ff1695b45a6e878ed0dd232` |
 | `ports/esp32-4mb` `tinydesk.bin` | `9e8eeb169a4730432779c58b151256d0beab3a29a8e53c6a53d471023703853b` |
 | Shell `tdsh_c6.bin` (built, not run on a board) | `0a6f741139a2e90a0ad60ecb39b184613257f55adb53cebd315f0807c4209646` |
 | Shell `tdsh_esp32.bin` (built, not run on a board) | `d77198c84c3fdee65ac5633c707ec0b15be0472f9eaad0ed55618332cb07a11b` |
+
+All three desktop images are built as the release workflow builds them
+(`-DTD_USE_EXAMPLE_BOARD=ON`, no settings built in); a first C6 build
+from 97286c5 had the developer's own `board.conf` built in and was
+replaced (the ESP32 images never had one). On the C6 the pins then come
+from its `/etc/board.conf`, as on a board updated by an official image.
 
 The first candidate, 26ae9c8, passed the same tests but About cut the
 TinyDesk Shell address to `.../tinydesk-s` (a label holds 47 characters on
@@ -195,18 +201,39 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
   line added, saved with Ctrl+S, closed, opened again with both lines;
   `cat` showed both lines from flash.
 - Shell commands: `whoami`, `uptime`, `heap`, `cat`, `rm`.
-- Memory, idle desktop: ESP32-C6 128 KB free (`heap`: 131,236 bytes,
-  largest block 100,352); ESP32 with PSRAM 155 KB + 3263 KB PSRAM
+- Memory, idle desktop: ESP32-C6 `heap` 132,568 bytes free (largest
+  block 102,400); ESP32 with PSRAM 155 KB + 3263 KB PSRAM
   (158,471, largest 110,592); 4 MB ESP32 96 KB (98,900, largest 86,016;
   lowest during the tests 66,824).
 - 10.5 minutes of use (About and the Terminal opened about once a minute)
-  and idle: no reset; `uptime` at the end 21:59 (ESP32-C6), 17:14 (ESP32
+  and idle: no reset; `uptime` at the end 12:58 (ESP32-C6), 17:14 (ESP32
   with PSRAM), 12:47 (4 MB ESP32).
+- The Shell firmware (`tdsh_esp32.bin` above) on the 4 MB ESP32, written
+  to the app partition (same layout as the desktop): boots to root on the
+  local console at 115200, `version` TinyDesk Shell 0.1.6, `heap` 210,700
+  bytes free, a file written and read back, a file opened, saved and
+  opened again in nano, a `.tdsh` script with arithmetic, `peek -l` (8
+  regions), `peek` of the eFuse, `poke` to RAM refused; 10.5 minutes of
+  commands and idle without a reset (`uptime` 12:21). Then the desktop
+  image above was written back and About showed TinyDesk 0.1.6.
+- The release packaged locally from these builds (`make_release.py
+  --build-dir`, into a copy of the site): 17 files, all matching
+  `SHA256SUMS.txt`; the five manifests name 0.1.6 and images that exist
+  and match; the two update feeds name 0.1.6 and the very app images
+  tested above (size and SHA-256). `fetch_release.py`'s check accepts the
+  release and refuses a copy with one byte of an image changed; the
+  site's tests (11) pass. The installer page from that copy: all five
+  board and edition choices show "version 0.1.6" with Install; quick
+  board changes end on the last one chosen; Linux programs not on the
+  site point to the GitHub releases, Windows programs download from the
+  site; a missing and an empty image each show "not on this site right
+  now" without Install, the other boards still install.
 
-Not done for this candidate yet: a cold boot by power cycle (the boards
-were reset over the serial lines), factory NVS, recovery, the Shell
-firmware on a board, and the installer and fresh installs from the
-release.
+Not done for this candidate yet (they need the owner: a power switch,
+passwords): a cold boot by power cycle (the boards were reset over the
+serial lines), factory NVS, recovery, and fresh installs from the live
+site. After tagging: the draft release's images against
+`SHA256SUMS.txt`.
 
 The `peek` and `poke` results below were on a build before the version
 bump (shell efb4e1f code).
