@@ -160,6 +160,24 @@ A successful build alone is not counted as a hardware test.
   built in), keeps its four board settings in `/etc/board.conf`, and all
   13 apps open.
 
+## 0.1.6 (not released yet)
+
+- `peek` and `poke` in the TinyDesk firmware, as root over the serial
+  Terminal: `peek -l` lists 9 regions on the ESP32 with PSRAM (with
+  `psram`), 8 on the 4 MB ESP32 (no `psram`) and 7 on the ESP32-C6. Reads
+  in every region; the eFuse MAC words match the Wi-Fi MAC on the ESP32
+  with PSRAM (90:38:0C:AD:45:60) and the ESP32-C6 (AC:EB:E6:D0:E7:C8).
+  Refused: 8-bit reads of the ESP32's instruction-bus ROM, `poke` to RAM
+  and to the read-only GPIO registers, 8- and 16-bit `poke`. A dump from
+  `gpio_out` into `gpio` (overlapping regions) works. `poke` set and
+  cleared the output latch of a pin whose output stays disabled (GPIO33
+  on the ESP32, GPIO1 on the ESP32-C6), read back with `peek`; no pin was
+  driven. The Shell firmware builds with the same table; not run on a
+  board.
+- A script that runs out of memory while it loads prints
+  `uscript: <file>:<line>: not enough memory to load the script`
+  (tinydesk-shell tests/test_script_oom.c, which fails without the fix).
+
 ## Not validated yet
 
 - The Editor's save and reopen on every board.
