@@ -162,17 +162,22 @@ A successful build alone is not counted as a hardware test.
 
 ## 0.1.6 (not released yet)
 
-Release candidate: `tinydesk` 26ae9c8 with `tinydesk-shell` e85ad85 (both
+Release candidate: `tinydesk` 97286c5 with `tinydesk-shell` e85ad85 (both
 version 0.1.6), built clean with ESP-IDF v5.3.1 on 2026-10-18. Images and
 their SHA-256:
 
 | Image | SHA-256 |
 | --- | --- |
-| `ports/esp32c6` `tinydesk.bin` | `06c4074726a3d68a051d5d8759b17a18cea967fa2b2dfc9b784256bb8829520f` |
-| `ports/esp32` `tinydesk.bin` | `282794354a965b7465006a842c45400bdcbd6ff5b55fa17a0efc088ebbc9fd7b` |
-| `ports/esp32-4mb` `tinydesk.bin` | `ef335688895a6051176088ff422af11a0a110200077a2bfcbeaab220e4d9ad1c` |
+| `ports/esp32c6` `tinydesk.bin` | `0e8876f04c1fa9d3fc05d3e8841499cf8dc10245b54590f5c0de069714e47bcc` |
+| `ports/esp32` `tinydesk.bin` | `621f56b5f1de2813eb64c57c6f2ebc539190b61d7ff1695b45a6e878ed0dd232` |
+| `ports/esp32-4mb` `tinydesk.bin` | `9e8eeb169a4730432779c58b151256d0beab3a29a8e53c6a53d471023703853b` |
 | Shell `tdsh_c6.bin` (built, not run on a board) | `0a6f741139a2e90a0ad60ecb39b184613257f55adb53cebd315f0807c4209646` |
 | Shell `tdsh_esp32.bin` (built, not run on a board) | `d77198c84c3fdee65ac5633c707ec0b15be0472f9eaad0ed55618332cb07a11b` |
+
+The first candidate, 26ae9c8, passed the same tests but About cut the
+TinyDesk Shell address to `.../tinydesk-s` (a label holds 47 characters on
+the ESP32 builds); 97286c5 draws both addresses whole. The Shell images
+are the same source in both and were built from 26ae9c8.
 
 Each board's whole flash was backed up first (kept off the repositories);
 the three desktop images were written to the app partition only, so
@@ -180,7 +185,8 @@ settings, users and files stayed. Then, as root, scripted over the serial
 link and read back from the screen, on the ESP32-C6 (USB, 80x25), the ESP32
 with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
 
-- About shows TinyDesk 0.1.6 and TinyDesk Shell 0.1.6 on all three;
+- About shows TinyDesk 0.1.6, TinyDesk Shell 0.1.6 and both repository
+  addresses in full on all three;
   `ota status` on the ESP32-C6 and the ESP32 with PSRAM: 0.1.6 in ota_0
   (the 4 MB ESP32 has no OTA).
 - A window dragged by its title (Counter) and resized from its corner
@@ -189,13 +195,13 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
   line added, saved with Ctrl+S, closed, opened again with both lines;
   `cat` showed both lines from flash.
 - Shell commands: `whoami`, `uptime`, `heap`, `cat`, `rm`.
-- Memory, idle desktop: ESP32-C6 128 KB free (`heap`: 131,248 bytes,
-  largest block 100,352); ESP32 with PSRAM 154 KB + 3263 KB PSRAM
-  (158,455, largest 110,592); 4 MB ESP32 96 KB (98,900, largest 86,016;
+- Memory, idle desktop: ESP32-C6 128 KB free (`heap`: 131,236 bytes,
+  largest block 100,352); ESP32 with PSRAM 155 KB + 3263 KB PSRAM
+  (158,471, largest 110,592); 4 MB ESP32 96 KB (98,900, largest 86,016;
   lowest during the tests 66,824).
 - 10.5 minutes of use (About and the Terminal opened about once a minute)
-  and idle: no reset; `uptime` at the end 15:58 (ESP32-C6), 15:34 (ESP32
-  with PSRAM), 14:54 (4 MB ESP32).
+  and idle: no reset; `uptime` at the end 21:59 (ESP32-C6), 17:14 (ESP32
+  with PSRAM), 12:47 (4 MB ESP32).
 
 Not done for this candidate yet: a cold boot by power cycle (the boards
 were reset over the serial lines), factory NVS, recovery, the Shell
