@@ -248,7 +248,29 @@ with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
   then the desktop image was written back. Its ESP32-C6 image was not
   run on a board.
 
-Not done for this candidate yet (they need the owner's passwords):
+- The TinyDesk draft release `v0.1.6` (tag on b084b2d, which has the
+  tested firmware source of 97286c5; built by the release workflow after
+  CI passed): its 19 files match its `SHA256SUMS.txt` and nothing is
+  unlisted; the five manifests name 0.1.6, the right chip and offset 0;
+  both update feeds name 0.1.6 and their app images (size, SHA-256
+  `1da7cedd49446229…` ESP32-C6, `e715ad1368181dd0…` ESP32); the four PC
+  archives hold the program, README and licences; the release text is
+  "New in 0.1.6". Its images on the boards (the ESP32-C6 and ESP32 app
+  images, the app part of the 4 MB factory image, each written to the
+  app partition): About shows TinyDesk 0.1.6, ESP-IDF v5.3.1, TinyDesk
+  Shell 0.1.6 and both addresses in full; window drag and resize, the
+  Editor open, save and reopen, shell commands, and 3 minutes of use and
+  idle without a reset on all three.
+
+- Published (both releases), then the site pushed and its GitHub Pages
+  workflow run: the live cover and installer page say 0.1.6; the five
+  manifests and their images, both update feeds with their app images,
+  and the four PC downloads on https://tinydesk-project.github.io/install/
+  match the release's `SHA256SUMS.txt`. `ota official` on the ESP32 with
+  PSRAM and the ESP32-C6 reads the live update information: "TinyDesk
+  0.1.6, the newest release, is installed."
+
+Not done for this release yet (they need the owner's passwords):
 factory NVS, recovery, and fresh installs from the live site. After tagging: the draft release's images against
 `SHA256SUMS.txt`.
 
