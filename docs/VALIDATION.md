@@ -162,6 +162,49 @@ A successful build alone is not counted as a hardware test.
 
 ## 0.1.6 (not released yet)
 
+Release candidate: `tinydesk` 26ae9c8 with `tinydesk-shell` e85ad85 (both
+version 0.1.6), built clean with ESP-IDF v5.3.1 on 2026-10-18. Images and
+their SHA-256:
+
+| Image | SHA-256 |
+| --- | --- |
+| `ports/esp32c6` `tinydesk.bin` | `06c4074726a3d68a051d5d8759b17a18cea967fa2b2dfc9b784256bb8829520f` |
+| `ports/esp32` `tinydesk.bin` | `282794354a965b7465006a842c45400bdcbd6ff5b55fa17a0efc088ebbc9fd7b` |
+| `ports/esp32-4mb` `tinydesk.bin` | `ef335688895a6051176088ff422af11a0a110200077a2bfcbeaab220e4d9ad1c` |
+| Shell `tdsh_c6.bin` (built, not run on a board) | `0a6f741139a2e90a0ad60ecb39b184613257f55adb53cebd315f0807c4209646` |
+| Shell `tdsh_esp32.bin` (built, not run on a board) | `d77198c84c3fdee65ac5633c707ec0b15be0472f9eaad0ed55618332cb07a11b` |
+
+Each board's whole flash was backed up first (kept off the repositories);
+the three desktop images were written to the app partition only, so
+settings, users and files stayed. Then, as root, scripted over the serial
+link and read back from the screen, on the ESP32-C6 (USB, 80x25), the ESP32
+with PSRAM (UART 921600, 160x50) and the 4 MB ESP32 (UART 921600, 80x25):
+
+- About shows TinyDesk 0.1.6 and TinyDesk Shell 0.1.6 on all three;
+  `ota status` on the ESP32-C6 and the ESP32 with PSRAM: 0.1.6 in ota_0
+  (the 4 MB ESP32 has no OTA).
+- A window dragged by its title (Counter) and resized from its corner
+  (Editor).
+- A file made with `write`, opened from its desktop icon in the Editor, a
+  line added, saved with Ctrl+S, closed, opened again with both lines;
+  `cat` showed both lines from flash.
+- Shell commands: `whoami`, `uptime`, `heap`, `cat`, `rm`.
+- Memory, idle desktop: ESP32-C6 128 KB free (`heap`: 131,248 bytes,
+  largest block 100,352); ESP32 with PSRAM 154 KB + 3263 KB PSRAM
+  (158,455, largest 110,592); 4 MB ESP32 96 KB (98,900, largest 86,016;
+  lowest during the tests 66,824).
+- 10.5 minutes of use (About and the Terminal opened about once a minute)
+  and idle: no reset; `uptime` at the end 15:58 (ESP32-C6), 15:34 (ESP32
+  with PSRAM), 14:54 (4 MB ESP32).
+
+Not done for this candidate yet: a cold boot by power cycle (the boards
+were reset over the serial lines), factory NVS, recovery, the Shell
+firmware on a board, and the installer and fresh installs from the
+release.
+
+The `peek` and `poke` results below were on a build before the version
+bump (shell efb4e1f code).
+
 - `peek` and `poke` in the TinyDesk firmware, as root over the serial
   Terminal: `peek -l` lists 9 regions on the ESP32 with PSRAM (with
   `psram`), 8 on the 4 MB ESP32 (no `psram`) and 7 on the ESP32-C6. Reads
