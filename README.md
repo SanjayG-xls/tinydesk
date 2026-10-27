@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/images/tinydesk-logo.png" alt="TinyDesk logo: the letters TD in blue pixels, with TinyDesk written in binary below" width="240"></p>
+
 # TinyDesk
 
 **A tiny board. A real desktop. Inside your terminal.**
